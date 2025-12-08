@@ -60,35 +60,35 @@ test.only("Client App login", async ({ page }) => {
   // checking if the e-mail output matches my e-mail
   expect(page.locator(".user__name [type='text']").first()).toHaveText(email);
 
-  await page.pause();
+  // locator('..') goes back to the parent element
+  // getByRole('textbox') finds the input field inside the parent element
+  await page.getByText('CVV Code').locator('..').getByRole('textbox').fill('123');
+  await page.getByText('Name on Card').locator('..').getByRole('textbox').fill('My name');  
+  await page.getByText('Apply Coupon').locator('..').getByRole('textbox').fill('rahulshettyacademy');
+  await page.locator(".btn.btn-primary").click();
+  await page.locator("text=Place Order").click();
 
-  // in playwright we don't use assert but expect
-  // expect(titles).toContain("ADIDAS ORIGINAL");
-  // if (titles.indexOf("ADIDAS ORIGINAL") !== -1) {
-  //   // click on the add to cart button of the product
-  //   const addToCartButton = page.locator(".btn.w-10.rounded");
-  //   await addToCartButton.nth(1).click();
-  //   console.log("Product added to the cart");
+  await expect(page.locator(".hero-primary")).toHaveText(" Thankyou for the order. ");
+  const orderId = await page.locator(".em-spacer-1 .ng-star-inserted").textContent();
+  console.log(orderId);
+
+  // assignment:
+  // after grabbing the order id, go to the orders page
+  // scan each column and see if the order id matches
+  // then click on view for that specific order 
+
+  await page.locator("[routerlink*='myorders']").first().click();
+
+  // const orders = await page.locator(".table.table-bordered").allTextContents();
+  
+  // for (let i = 0; i < orders; ++i) {
+  //   if (await page.locator('th[scope="row"]') == orderId) {
+  //     await page.locator('th[scope="row"]').toHaveText(orderId);
+  //     // await page.getByText('View').locator('..').locator('..').click();
+  //     console.log("order found");
+  //     break;
+  //   }
   // }
 
 
-  // const CVV = page.locator("//input[@type='text']").nth(1);
-  // await CVV.fill("123");
-  // const nameCard = page.locator("//input[@type='text']").nth(2);
-  // await nameCard.fill("Amanda Leal");
-  // const cupom = page.locator("//input[@type='text']").nth(3);
-  // await cupom.fill("rahulshettyacademy");
-  // until here the code is working fine
-  // const applyCupom = page.locator("btn btn-primary mt-1");
-  // await applyCupom.click();
-  // const country = page.locator("//input[@placeholder='Select Country']");
-
-  // await country.type("bra", { delay: 100 });
-  // const dropDown = page.locator(".ta-results list-group");
-  // const option = page.locator("ta-item list-group-item").first();
-  // await option.click();
-  // const placeHolder = page.locator("btnn action__submit");
-  // await option.click();
-  // await page.getByText("Thankyou for the order.").isVisible();
-  // console.log("Order completed successfully");
 });

@@ -14,7 +14,7 @@ const config = ({
   reporter: "html", // report means how the results are shown
   use: {
     browserName: "chromium", // what browser to use
-    headless : false, // means the browser will be visible
+    headless : true, // means the browser will be visible
     screenshot: "retain-on-failure", // if test fails, take a screenshot
     trace: 'retain-on-failure', // collect trace when test fails, helps debug issues
 
