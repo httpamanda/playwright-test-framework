@@ -36,7 +36,6 @@ test.only("Client App login", async ({ page }) => {
   // in playwright we don't use assert but expect
   expect(bool).toBeTruthy();
   await page.locator("text=Checkout").click();
-
   
 
     // HOW TO HANDLE DROPDOWNS
@@ -73,22 +72,19 @@ test.only("Client App login", async ({ page }) => {
   console.log(orderId);
 
   // assignment:
-  // after grabbing the order id, go to the orders page
+  // after grabbing the order id, go to the orders page OK
   // scan each column and see if the order id matches
   // then click on view for that specific order 
 
   await page.locator("[routerlink*='myorders']").first().click();
 
-  // const orders = await page.locator(".table.table-bordered").allTextContents();
-  
-  // for (let i = 0; i < orders; ++i) {
-  //   if (await page.locator('th[scope="row"]') == orderId) {
-  //     await page.locator('th[scope="row"]').toHaveText(orderId);
-  //     // await page.getByText('View').locator('..').locator('..').click();
-  //     console.log("order found");
-  //     break;
-  //   }
-  // }
+  const orders = await page.locator('tbody[xpath="1"]').allTextContents();
+
+  for(let i = 0; i < orders.lenght; ++i) {
+    if(i === orderId) {
+      console.log(orderId);
+    }
+  }
 
 
 });
