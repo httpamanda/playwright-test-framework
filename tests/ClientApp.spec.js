@@ -36,9 +36,9 @@ test.only("Client App login", async ({ page }) => {
   // in playwright we don't use assert but expect
   expect(bool).toBeTruthy();
   await page.locator("text=Checkout").click();
-  
 
-    // HOW TO HANDLE DROPDOWNS
+
+  // HOW TO HANDLE DROPDOWNS
   // added delay here because it prevents this step from failing if the
   // application server is slow due to heavy traffic
   await page.locator("[placeholder*='Country']").pressSequentially("bra", { delay: 150 }); // it enters  b → (delay 150 ms) → enters r → (delay 150 ms) → enters a
@@ -62,7 +62,7 @@ test.only("Client App login", async ({ page }) => {
   // locator('..') goes back to the parent element
   // getByRole('textbox') finds the input field inside the parent element
   await page.getByText('CVV Code').locator('..').getByRole('textbox').fill('123');
-  await page.getByText('Name on Card').locator('..').getByRole('textbox').fill('My name');  
+  await page.getByText('Name on Card').locator('..').getByRole('textbox').fill('My name');
   await page.getByText('Apply Coupon').locator('..').getByRole('textbox').fill('rahulshettyacademy');
   await page.locator(".btn.btn-primary").click();
   await page.locator("text=Place Order").click();
@@ -71,18 +71,22 @@ test.only("Client App login", async ({ page }) => {
   const orderId = await page.locator(".em-spacer-1 .ng-star-inserted").textContent();
   console.log(orderId);
 
+  await page.locator("[routerlink*='myorders']").first().click();
+
   // assignment:
   // after grabbing the order id, go to the orders page OK
   // scan each column and see if the order id matches
   // then click on view for that specific order 
 
-  await page.locator("[routerlink*='myorders']").first().click();
+  await page.pause()
 
-  const orders = await page.locator('tbody[xpath="1"]').allTextContents();
+  const rows = await page.locator("tbody tr").all();
 
-  for(let i = 0; i < orders.lenght; ++i) {
-    if(i === orderId) {
-      console.log(orderId);
+  for (const row of rows) {
+    const rowId = await row.locator("th").textContent();
+    if (rowId.includes(orderId)) {
+      await row.locator("button").first().click();
+      break;
     }
   }
 
