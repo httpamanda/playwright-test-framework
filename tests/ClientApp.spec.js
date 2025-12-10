@@ -65,11 +65,14 @@ test.only("Client App login", async ({ page }) => {
   await page.getByText('Name on Card').locator('..').getByRole('textbox').fill('My name');
   await page.getByText('Apply Coupon').locator('..').getByRole('textbox').fill('rahulshettyacademy');
   await page.locator(".btn.btn-primary").click();
+  await expect(page.locator(".mt-1.ng-star-inserted")).toHaveText("* Coupon Applied");
   await page.locator("text=Place Order").click();
 
   await expect(page.locator(".hero-primary")).toHaveText(" Thankyou for the order. ");
   const orderId = await page.locator(".em-spacer-1 .ng-star-inserted").textContent();
   console.log(orderId);
+  const cleanOrderId = orderId.replace(/^[| \s\uFEFF\xA0]+|[| \s\uFEFF\xA0]+$/g, "");
+  console.log(cleanOrderId);
 
   await page.locator("[routerlink*='myorders']").first().click();
 
@@ -84,7 +87,8 @@ test.only("Client App login", async ({ page }) => {
 
   for (const row of rows) {
     const rowId = await row.locator("th").textContent();
-    if (rowId.includes(orderId)) {
+    console.log(rowId);
+    if (rowId.includes(cleanOrderId)) {
       await row.locator("button").first().click();
       break;
     }
