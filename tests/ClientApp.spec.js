@@ -71,28 +71,26 @@ test.only("Client App login", async ({ page }) => {
   await expect(page.locator(".hero-primary")).toHaveText(" Thankyou for the order. ");
   const orderId = await page.locator(".em-spacer-1 .ng-star-inserted").textContent();
   console.log(orderId);
-  const cleanOrderId = orderId.replace(/^[| \s\uFEFF\xA0]+|[| \s\uFEFF\xA0]+$/g, "");
-  console.log(cleanOrderId);
 
-  await page.locator("[routerlink*='myorders']").first().click();
+  // GO TO ORDERS PAGE  
+  await page.locator("button[routerlink*='myorders']").click();
+  await page.locator("tbody").waitFor();
 
-  // assignment:
-  // after grabbing the order id, go to the orders page OK
-  // scan each column and see if the order id matches
-  // then click on view for that specific order 
+  // scan each row of the table
+  const rows = await page.locator("tbody tr");
 
-  await page.pause()
-
-  const rows = await page.locator("tbody tr").all();
-
-  for (const row of rows) {
-    const rowId = await row.locator("th").textContent();
-    console.log(rowId);
-    if (rowId.includes(cleanOrderId)) {
-      await row.locator("button").first().click();
-      break;
+  // for each row, check the order id
+  for (let i = 0; i < await rows.count(); ++i) {
+    // instead of using page.locator, we use rows locator to go through each row and not the whole page  
+    const rowOrderId = await rows.nth(i).locator("th").textContent();
+    if (orderId.includes(rowOrderId)) {
+      await rows.nth(i).locator("button").first().click();
     }
   }
+  const orderIdDetails = await page.locator(".col-text").textContent();
+  expect(orderId.includes(orderIdDetails)).toBeTruthy();
 
+  
+  // await page.pause()
 
 });
