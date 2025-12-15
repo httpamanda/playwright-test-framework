@@ -1,6 +1,6 @@
 const { test, expect } = require("@playwright/test");
 
-test.only("Client App login", async ({ page }) => {
+test("Client App login", async ({ page }) => {
   const email = "lealamanda1998@gmail.com";
   const productName = "ZARA COAT 3";
   const products = page.locator(".card-body");

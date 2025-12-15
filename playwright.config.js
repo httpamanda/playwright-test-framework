@@ -4,8 +4,8 @@ import { defineConfig, devices } from "@playwright/test";
 // all is being held in one variable
 const config = ({
   testDir: "./tests",
-  //timeout for overall test - 30 seconds
-  timeout: 30 * 1000,
+  //timeout for overall test - 20 seconds
+  timeout: 20 * 1000,
   expect: {
     //timeout for assertions - 5 seconds
     timeout: 5000,
