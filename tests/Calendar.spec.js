@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 
-test.only('Calendar validations', async ({ page }) => {
+test('Calendar validations', async ({ page }) => {
 
     const calendar = page.locator(".react-calendar__navigation__label");
     const monthNumber = "6";
